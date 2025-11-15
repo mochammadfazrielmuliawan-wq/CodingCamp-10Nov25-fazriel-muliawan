@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fazriel muliawan</title>
+<style>
+    body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: #0a0f24;
+        color: white;
+        padding: 40px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .container {
+        width: 600px;
+        background: #111a35;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.7rem;
+    }
+
+    .input-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    input {
+        flex: 1;
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        background: #0d152c;
+        color: white;
+    }
+
+    button {
+        padding: 10px 14px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .add-btn {
+        background: #6c63ff;
+        color: white;
+        font-size: 1.2rem;
+    }
+
+    .filter-btn,
+    .delete-all-btn {
+        background: #1e2a4a;
+        color: white;
+        margin-right: 10px;
+    }
+
+    table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+        background: #0d152c;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+    }
+
+    th {
+        background: #131c36;
+    }
+
+    tr:nth-child(even) {
+        background: #10182f;
+    }
+
+    .empty {
+        text-align: center;
+        padding: 20px;
+        color: #b3b3b3;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Todo List</h1>
+
+    <div class="input-group">
+        <input type="text" placeholder="Add a todo..." />
+        <input type="date" />
+        <button class="add-btn">+</button>
+    </div>
+
+    <button class="filter-btn">FILTER</button>
+    <button class="delete-all-btn">DELETE ALL</button>
+
+    <table>
+        <tr>
+            <th>TASK</th>
+            <th>DUE DATE</th>
+            <th>STATUS</th>
+            <th>ACTIONS</th>
+        </tr>
+        <tr>
+            <td class="empty" colspan="4">No task found</td>
+        </tr>
+    </table>
+</div>
+
+<script>
+// DOM elements
+const inputText = document.querySelector('input[type="text"]');
+const inputDate = document.querySelector('input[type="date"]');
+const addBtn = document.querySelector('.add-btn');
+const deleteAllBtn = document.querySelector('.delete-all-btn');
+const table = document.querySelector('table');
+
+let todos = [];
+
+function renderTodos() {
+    const rows = table.querySelectorAll('tr');
+    rows.forEach((r, i) => { if (i > 0) r.remove(); });
+
+    if (todos.length === 0) {
+        const emptyRow = <tr><td class="empty" colspan="4">No task found</td></tr>;
+        table.insertAdjacentHTML('beforeend', emptyRow);
+        return;
+    }
+
+    todos.forEach((todo, index) => {
+        const row = `
+        <tr>
+            <td>${todo.text}</td>
+            <td>${todo.date}</td>
+            <td>${todo.done ? 'Done' : 'Pending'}</td>
+            <td>
+                <button onclick="toggleStatus(${index})">✔</button>
+                <button onclick="deleteTodo(${index})">🗑</button>
+            </td>
+        </tr>`;
+        table.insertAdjacentHTML('beforeend', row);
+    });
+}
+
+function addTodo() {
+    if (inputText.value.trim() === '' || inputDate.value === '') return;
+
+    todos.push({ text: inputText.value, date: inputDate.value, done: false });
+    inputText.value = '';
+    inputDate.value = '';
+
+    renderTodos();
+}
+
+function deleteTodo(index) {
+    todos.splice(index, 1);
+    renderTodos();
+}
+
+function toggleStatus(index) {
+    todos[index].done = !todos[index].done;
+    renderTodos();
+}
+
+addBtn.addEventListener('click', addTodo);
+deleteAllBtn.addEventListener('click', () => { todos = []; renderTodos(); });
+
+renderTodos();
+</script>
+</body>
+</html>
