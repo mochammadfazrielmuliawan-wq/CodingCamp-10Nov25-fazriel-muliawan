@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Fazriel muliawan</title>
+<title>Todo List Modern</title>
 <style>
     body {
         margin: 0;
@@ -115,9 +115,6 @@
             <th>STATUS</th>
             <th>ACTIONS</th>
         </tr>
-        <tr>
-            <td class="empty" colspan="4">No task found</td>
-        </tr>
     </table>
 </div>
 
@@ -136,7 +133,10 @@ function renderTodos() {
     rows.forEach((r, i) => { if (i > 0) r.remove(); });
 
     if (todos.length === 0) {
-        const emptyRow = <tr><td class="empty" colspan="4">No task found</td></tr>;
+        const emptyRow = `
+            <tr>
+                <td class="empty" colspan="4">No task found</td>
+            </tr>`;
         table.insertAdjacentHTML('beforeend', emptyRow);
         return;
     }
@@ -162,7 +162,6 @@ function addTodo() {
     todos.push({ text: inputText.value, date: inputDate.value, done: false });
     inputText.value = '';
     inputDate.value = '';
-
     renderTodos();
 }
 
